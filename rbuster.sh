@@ -21,7 +21,7 @@ fi
 explore() {
 #RHOST=$1
 #echo [+] RHOST = $1
-RCMD=$(rsync rsync://$RHOST)
+RCMD=$(rsync --password-file=pass.txt rsync://$RHOST)
 share=$(echo $RCMD | cut -d" " -f1)
 timeout 15 rsync --password-file=pass.txt rsync://$RHOST/ > rootfolders.txt
 cat rootfolders.txt  |  cut -d ' ' -f 1  |  while read output
