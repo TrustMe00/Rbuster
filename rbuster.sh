@@ -21,18 +21,18 @@ fi
 explore() {
 #RHOST=$1
 #echo [+] RHOST = $1
-RCMD=$(rsync --password-file=pass.txt rsync://$RHOST)
+RCMD=$(rsync --timeout=5 --password-file=pass.txt rsync://$RHOST)
 share=$(echo $RCMD | cut -d" " -f1)
 timeout 15 rsync --password-file=pass.txt rsync://$RHOST/ > rootfolders.txt
 cat rootfolders.txt  |  cut -d ' ' -f 1  |  while read output
 do
-   ExploreRsync=$(rsync  --password-file=pass.txt rsync://$RHOST/$output)
+   ExploreRsync=$(rsync   --timeout=5 --password-file=pass.txt rsync://$RHOST/$output)
    ErrorExploreRsync="error"
    if [[ "$ErrorExploreRsync" == *"$ExploreRsync"* ]]; then
      echo "[ERROR] : rsync://$RHOST/$output"
    else
      echo "EXPLORING $output"
-     rsync  -av --list-only  --password-file=pass.txt rsync://$RHOST/$output >> $RHOST.txt
+     rsync  -av --list-only   --timeout=5 --password-file=pass.txt rsync://$RHOST/$output >> $RHOST.txt
    fi  
 done
 }
